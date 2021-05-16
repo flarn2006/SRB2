@@ -339,6 +339,7 @@ void COM_Init(void)
 	COM_AddCommand("help", COM_Help_f);
 	COM_AddCommand("toggle", COM_Toggle_f);
 	COM_AddCommand("add", COM_Add_f);
+	COM_AddCommand("lua", COM_Lua_eval_f);
 	RegisterNetXCmd(XD_NETVAR, Got_NetVar);
 }
 
