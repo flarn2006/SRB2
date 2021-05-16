@@ -181,6 +181,8 @@ extern CV_PossibleValue_t CV_Natural[];
 // Filter consvars by version
 extern consvar_t cv_execversion;
 
+extern boolean com_sudo;
+
 void CV_InitFilterVar(void);
 void CV_ToggleExecVersion(boolean enable);
 

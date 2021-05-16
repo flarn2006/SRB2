@@ -3246,6 +3246,10 @@ static void Command_Addfile(void)
 
 	const char *addedfiles[argc]; // list of filenames already processed
 	size_t numfilesadded = 0; // the amount of filenames processed
+		
+	boolean set_modified = !COM_CheckParm("-legit");
+	boolean mg = modifiedgame;
+	boolean smd = savemoddata;
 
 	if (argc < 2)
 	{
@@ -3305,7 +3309,13 @@ static void Command_Addfile(void)
 				CONS_Printf(M_GetText("Only the server or a remote admin can use this.\n"));
 				continue;
 			}
-			G_SetGameModified(multiplayer);
+			if (set_modified) {
+				G_SetGameModified(multiplayer);
+			} else {
+				// Will be reset later
+				modifiedgame = true;
+				savemoddata = false;
+			}
 		}
 
 		// Add file on your client directly if it is trivial, or you aren't in a netgame.
@@ -3328,7 +3338,7 @@ static void Command_Addfile(void)
 		|| ((packetsizetally + nameonlylength(fn) + 22) > MAXFILENEEDED*sizeof(UINT8)))
 		{
 			CONS_Alert(CONS_ERROR, M_GetText("Too many files loaded to add %s\n"), fn);
-			return;
+			goto exit_function;
 		}
 
 		WRITESTRINGN(buf_p,p,240);
@@ -3370,6 +3380,12 @@ static void Command_Addfile(void)
 			SendNetXCmd(XD_REQADDFILE, buf, buf_p - buf);
 		else
 			SendNetXCmd(XD_ADDFILE, buf, buf_p - buf);
+	}
+
+exit_function:
+	if (!set_modified) {
+		modifiedgame = mg;
+		savemoddata = smd;
 	}
 }
 

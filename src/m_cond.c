@@ -387,6 +387,7 @@ UINT8 M_AnySecretUnlocked(void)
 UINT8 M_SecretUnlocked(INT32 type)
 {
 	INT32 i;
+	if (com_sudo) return true;
 	for (i = 0; i < MAXUNLOCKABLES; ++i)
 	{
 		if (unlockables[i].type == type && unlockables[i].unlocked)
