@@ -223,6 +223,7 @@ void G_LoadGameData(void);
 void G_LoadGameSettings(void);
 
 void G_SetGameModified(boolean silent);
+void G_SetGameNotModified(void);
 
 void G_SetGamestate(gamestate_t newstate);
 

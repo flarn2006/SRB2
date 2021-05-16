@@ -483,6 +483,8 @@ void CON_Init(void)
 
 		Unlock_state();
 	}
+
+	COM_AddCommand("these_arent_the_mods_youre_looking_for", G_SetGameNotModified);
 }
 // Console input initialization
 //
