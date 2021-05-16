@@ -777,6 +777,15 @@ void G_SetGameModified(boolean silent)
 		Command_ExitGame_f();
 }
 
+void G_SetGameNotModified()
+{
+	if (modifiedgame) {
+		modifiedgame = false;
+		savemoddata = false;
+		CONS_Alert(CONS_WARNING, M_GetText("Statistics will once again be recorded.\n"));
+	}
+}
+
 /** Builds an original game map name from a map number.
   * The complexity is due to MAPA0-MAPZZ.
   *

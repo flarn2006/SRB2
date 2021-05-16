@@ -51,6 +51,7 @@ static void COM_Wait_f(void);
 static void COM_Help_f(void);
 static void COM_Toggle_f(void);
 static void COM_Add_f(void);
+static void COM_Sudo_f(void);
 
 static void CV_EnforceExecVersion(void);
 static boolean CV_FilterVarByVersion(consvar_t *v, const char *valstr);
@@ -91,6 +92,8 @@ static INT32 joyaxis2_count = 0;
 #define MAX_ALIAS_RECURSION 100 // max recursion allowed for aliases
 
 static INT32 com_wait; // one command per frame (for cmd sequences)
+
+boolean com_sudo = false;
 
 // command aliases
 //
@@ -340,6 +343,7 @@ void COM_Init(void)
 	COM_AddCommand("toggle", COM_Toggle_f);
 	COM_AddCommand("add", COM_Add_f);
 	COM_AddCommand("lua", COM_Lua_eval_f);
+	COM_AddCommand("sudo", COM_Sudo_f);
 	RegisterNetXCmd(XD_NETVAR, Got_NetVar);
 }
 
@@ -1036,6 +1040,50 @@ static void COM_Add_f(void)
 	else
 		CV_AddValue(cvar, atoi(COM_Argv(2)));
 }
+
+static void COM_Sudo_f(void)
+{
+	boolean mp = multiplayer;
+	boolean ng = netgame;
+	boolean dp = devparm;
+	xcommand_t *cmd;
+	boolean found_cmd = false;
+	boolean cmd_is_devmode;
+	size_t i;
+
+	if (COM_Argc() < 2) {
+		CONS_Printf("Usage: sudo <command>\n");
+		return;
+	}
+
+	cmd_is_devmode = !stricmp(com_argv[0], "devmode");
+
+	com_sudo = true;
+	multiplayer = netgame = false;
+	if (!cmd_is_devmode)
+		devparm = true;
+
+	--com_argc;
+	for (i=0; i<com_argc; ++i)
+		com_argv[i] = com_argv[i+1];
+
+	for (cmd = com_commands; cmd; cmd = cmd->next) {
+		if (!stricmp(com_argv[0], cmd->name)) {
+			cmd->function();
+			found_cmd = true;
+			break;
+		}
+	}
+	if (!found_cmd && !CV_Command() && con_destlines)
+		CONS_Printf(M_GetText("Unknown command '%s'\n"), COM_Argv(0));
+	
+	com_sudo = false;
+	multiplayer = mp;
+	netgame = ng;
+	if (!cmd_is_devmode)
+		devparm = dp;
+}
+
 
 // =========================================================================
 //                      VARIABLE SIZE BUFFERS
