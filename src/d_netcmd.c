@@ -3337,8 +3337,10 @@ static void Command_Addfile(void)
 		if ((numwadfiles >= MAX_WADFILES)
 		|| ((packetsizetally + nameonlylength(fn) + 22) > MAXFILENEEDED*sizeof(UINT8)))
 		{
-			CONS_Alert(CONS_ERROR, M_GetText("Too many files loaded to add %s\n"), fn);
-			goto exit_function;
+			if (!set_modified) {
+				CONS_Alert(CONS_ERROR, M_GetText("Too many files loaded to add %s\n"), fn);
+				goto exit_function;
+			}
 		}
 
 		WRITESTRINGN(buf_p,p,240);
@@ -3374,9 +3376,10 @@ static void Command_Addfile(void)
 			WRITEMEM(buf_p, md5sum, 16);
 		}
 
-		addedfiles[numfilesadded++] = fn;
+		if (!set_modified)
+			addedfiles[numfilesadded++] = fn;
 
-		if (IsPlayerAdmin(consoleplayer) && (!server)) // Request to add file
+		if (IsPlayerAdmin(consoleplayer) && (!server) && (!set_modified)) // Request to add file
 			SendNetXCmd(XD_REQADDFILE, buf, buf_p - buf);
 		else
 			SendNetXCmd(XD_ADDFILE, buf, buf_p - buf);
@@ -4509,7 +4512,7 @@ static void Skin_OnChange(void)
 		return;
 	}
 
-	if (CanChangeSkin(consoleplayer) && !P_PlayerMoving(consoleplayer))
+	if (CanChangeSkin(consoleplayer))
 		SendNameAndColor();
 	else
 	{
@@ -4555,7 +4558,7 @@ static void Color_OnChange(void)
 			return;
 		}
 
-		if (!P_PlayerMoving(consoleplayer) && skincolors[players[consoleplayer].skincolor].accessible == true)
+		if (skincolors[players[consoleplayer].skincolor].accessible == true)
 		{
 			// Color change menu scrolling fix is no longer necessary
 			SendNameAndColor();
