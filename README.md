@@ -6,6 +6,19 @@
 
 [Sonic Robo Blast 2](https://srb2.org/) is a 3D Sonic the Hedgehog fangame based on a modified version of [Doom Legacy](http://doomlegacy.sourceforge.net/).
 
+## About this fork
+This is my (flarn2006) personal version, containing some changes I made for my own purposes, mainly related to console commands. I'm putting this out here in case anyone else wants to use it, but be aware, a lot of these changes are done in a quick-and-dirty way, and there are some bugs which I may or may not fix when and if I get tired of dealing with them. That said, here are the changes I've made:
+
+- A `lua` console command, which runs a line of Lua code given in the arguments. Keep in mind this does not set the "game modified" flag, so unless that flag is already set by something else, be careful not to affect your save data in a way you don't want. I plan to replace this with the inclusion of `dostring` and/or `loadstring` in Lua, which will allow a Lua script to replicate this functionality. (With the help of one or more of the following features, if you don't want the "modified" flag to be set.)
+
+- A `sudo` console command, which does what you'd imagine it does if you're familiar with its namesake. More specifically, it temporarily sets `devparm` to true, and `multiplayer` and `netgame` to false, before executing a command, then restores their previous values afterwards. It also sets a flag which I can reference in other parts of the code to add additional command-specific overrides.
+
+- Typing `these_arent_the_mods_youre_looking_for` in the console will clear the "game modified" command if it is set.
+
+- Specifying the `-legit` option for `addfile` will import the file without flagging the game as modified. (Notice a recurring theme here? :P) This is useful in `autoexec.cfg`, if you still want the flag to be set when you use `-file`.
+
+- Changing skin color now works even when you're moving, though it might cause glitches with some characters, including [my own](https://mb.srb2.org/addons/sparks-the-scarf-rider.2807/).
+
 ## Dependencies
 - NASM (x86 builds only)
 - SDL2 (Linux/OS X only)
@@ -20,3 +33,5 @@ See [SRB2 Wiki/Source code compiling](http://wiki.srb2.org/wiki/Source_code_comp
 
 ## Disclaimer
 Sonic Team Junior is in no way affiliated with SEGA or Sonic Team. We do not claim ownership of any of SEGA's intellectual property used in SRB2.
+
+I (flarn2006) take no responsibility for any damage to your save data or computer. In addition, while this version does allow you to use arbitrary mods in multiplayer games, I don't condone doing so in a manner that violates the rules of the server you're playing on. If you choose to do so anyway, you take sole responsibility for the consequences of your actions.
