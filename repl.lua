@@ -37,7 +37,7 @@ end
 COM_AddCommand('lua', function(player, ...)
 	local arg = ''
 	for i,v in ipairs({...}) do
-		if i == 1 then
+		if i > 1 then
 			arg = $..' '
 		end
 		arg = $..v
@@ -48,6 +48,7 @@ COM_AddCommand('lua', function(player, ...)
 		f = loadstring(arg)
 		if type(f) == 'string' then
 			print_error(f)
+			return
 		end
 	end
 
