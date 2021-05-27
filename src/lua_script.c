@@ -533,42 +533,6 @@ void LUA_ClearExtVars(void)
 }
 #endif
 
-#define COM_LUA_BUFSIZE 1024
-
-void COM_Lua_eval_f(void)
-{
-	char buf[COM_LUA_BUFSIZE];
-	char* bufptr = buf;
-	size_t buf_remain = COM_LUA_BUFSIZE;
-	size_t argc = COM_Argc();
-
-	if (argc < 2) {
-		CONS_Alert(CONS_ERROR, "Must specify some Lua code to execute\n");
-		return;
-	}
-
-	int i; for (i=1; i<argc && buf_remain; ++i) {
-		const char* srcptr = COM_Argv(i);
-		if (i > 1) {
-			*bufptr++ = ' ';
-			--buf_remain;
-		}
-		while (*srcptr && buf_remain) 
-			*bufptr++ = *srcptr++;
-	}
-
-	if (!gL)
-		LUA_ClearState();
-	
-	if (luaL_dostring(gL, buf) == 0) {
-		const char* result_str = lua_tostring(gL, -1);
-		CONS_Printf("Result: %s\n", result_str);
-		lua_pop(gL, 1);
-	} else {
-		CONS_Alert(CONS_ERROR, "Error(s) occurred while trying to execute code.\n");
-	}
-}
-
 // Use this variable to prevent certain functions from running
 // if they were not called on lump load
 // (i.e. they were called in hooks or coroutines etc)

@@ -99,9 +99,6 @@ void LUA_InvalidatePlayer(player_t *player);
 // Console wrapper
 void COM_Lua_f(void);
 
-// Actual command
-void COM_Lua_eval_f(void);
-
 #define LUA_ErrInvalid(L, type) luaL_error(L, "accessed " type " doesn't exist anymore, please check 'valid' before using " type ".");
 
 #define LUA_ErrSetDirectly(L, type, field) luaL_error(L, type " field " LUA_QL(field) " cannot be set directly.")
