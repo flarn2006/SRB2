@@ -320,6 +320,16 @@ static int lib_reserveLuabanks(lua_State *L)
 	return 1;
 }
 
+static int lib_loadstring(lua_State *L)
+{
+	if (luaL_checkstring(L, -1)) {
+		luaL_loadstring(L, lua_tolstring(L, -1, NULL));
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 // M_MENU
 //////////////
 
@@ -3771,6 +3781,7 @@ static luaL_Reg lib[] = {
 	{"userdataMetatable", lib_userdataMetatable},
 	{"IsPlayerAdmin", lib_isPlayerAdmin},
 	{"reserveLuabanks", lib_reserveLuabanks},
+	{"loadstring", lib_loadstring},
 
 	// m_menu
 	{"M_MoveColorAfter",lib_pMoveColorAfter},
