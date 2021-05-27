@@ -9,7 +9,7 @@
 ## About this fork
 This is my (flarn2006) personal version, containing some changes I made for my own purposes, mainly related to console commands. I'm putting this out here in case anyone else wants to use it, but be aware, a lot of these changes are done in a quick-and-dirty way, and there are some bugs which I may or may not fix when and if I get tired of dealing with them. That said, here are the changes I've made:
 
-- A `lua` console command, which runs a line of Lua code given in the arguments. Keep in mind this does not set the "game modified" flag, so unless that flag is already set by something else, be careful not to affect your save data in a way you don't want. I plan to replace this with the inclusion of `dostring` and/or `loadstring` in Lua, which will allow a Lua script to replicate this functionality. (With the help of one or more of the following features, if you don't want the "modified" flag to be set.)
+- The `loadstring` function has been added to Lua. I've also included a script, `repl.lua`, which uses this to provide a REPL-like interface via a `lua` console command.
 
 - A `sudo` console command, which does what you'd imagine it does if you're familiar with its namesake. More specifically, it temporarily sets `devparm` to true, and `multiplayer` and `netgame` to false, before executing a command, then restores their previous values afterwards. It also sets a flag which I can reference in other parts of the code to add additional command-specific overrides.
 
