@@ -379,8 +379,8 @@ INT32 CL_CheckFiles(void)
 	size_t packetsize = 0;
 	size_t filestoget = 0;
 
-//	if (M_CheckParm("-nofiles"))
-//		return 1;
+	if (M_CheckParm("-nofiles"))
+		return 1;
 
 	// the first is the iwad (the main wad file)
 	// we don't care if it's called srb2.pk3 or not.
