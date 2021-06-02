@@ -24,6 +24,10 @@ local env_meta = {
 	end
 }
 
+local function print_error(text)
+	print('\x85'..'ERROR: \x80'..text)
+end
+
 local interval_meta = {
 	__tostring=function(int)
 		local str
@@ -53,6 +57,9 @@ local watch_meta = {
 		else
 			str = '<w: '
 		end
+		if watch.label then
+			str = $..'"'..watch.label..'" '
+		end
 		return str..watch.str..'>'
 	end,
 	__call=function(watch, ...)
@@ -60,8 +67,11 @@ local watch_meta = {
 		if s then
 			return r
 		else
-			watch.enabled = false
-			print_error(r)
+			if not watch.suppress_errors then
+				print_error(r)
+				watch.suppress_errors = true
+			end
+			return '\x85'..'ERROR'
 		end
 	end
 }
@@ -100,7 +110,7 @@ end
 local function reset_env()
 	env = {out={}, intervals={}, watches={}}
 	env.hud_x = 0
-	env.hud_y = 120
+	env.hud_y = 132
 	env.hud_flags = V_HUDTRANS|V_SMALLSCALEPATCH|V_ALLOWLOWERCASE
 	setmetatable(env.out, list_meta)
 	setmetatable(env.intervals, list_meta)
@@ -134,11 +144,17 @@ local function reset_env()
 		return int
 	end
 
-	env.watch = function(func, str)
-		str = $ or tostring(func)
+	env.watch = function(func, label)
+		local str = tostring(func)
+		if label ~= nil then
+			label = tostring($)
+		end
 		func = process_func_arg(func, 'the first argument to watch', 'return ')
-		local watch = {func=func, str=str, enabled=true}
-		watch.on = function() watch.enabled = true end
+		local watch = {func=func, str=str, label=label, enabled=true}
+		watch.on = function()
+			watch.enabled = true
+			watch.suppress_errors = false
+		end
 		watch.off = function() watch.enabled = false end
 		setmetatable(watch, watch_meta)
 		table.insert(env.watches, watch)
@@ -165,13 +181,22 @@ local function reset_env()
 		return mo
 	end
 
+	env.fu = function(value)
+		local str = tostring(value/FRACUNIT)..'FU'
+		local frac = value % FRACUNIT
+		local fstr = tostring(frac)
+		if frac > 0 then
+			return str..'+'..fstr
+		elseif frac < 0 then
+			return str..fstr
+		else
+			return str
+		end
+	end
+
 	setmetatable(env, env_meta)
 end
 reset_env()
-
-local function print_error(text)
-	print('\x85'..'ERROR: \x80'..text)
-end
 
 COM_AddCommand('lua', function(player, ...)
 	local arg = ''
@@ -223,11 +248,13 @@ end)
 
 local function watch_hud(v)
 	local ROW_HEIGHT = 10
+	local y = env.hud_y
 	for i,w in ipairs(env.watches) do
 		if w.enabled then
-			local y = env.hud_y + 2*ROW_HEIGHT * (i-1)
-			v.drawString(env.hud_x, y, '\x82'..w.str..'=', env.hud_flags)
+			local label = w.label or (w.str..'=')
+			v.drawString(env.hud_x, y, '\x82'..label, env.hud_flags)
 			v.drawString(env.hud_x, y+ROW_HEIGHT, tostring(w()), env.hud_flags)
+			y = $ + 2*ROW_HEIGHT
 		end
 	end
 end
