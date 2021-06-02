@@ -61,13 +61,13 @@ local list_meta = {
 
 local function process_func_arg(arg, arg_desc)
 	if type(arg) == 'string' then
-		local f = loadstring(arg)
-		if type(f) == 'function' then
+		local f,e = loadstring(arg)
+		if f then
 			setfenv(f, env)
+			return f
 		else
-			error(f)
+			error(e)
 		end
-		return f
 	elseif type(arg) == 'function' then
 		return arg
 	else
@@ -144,11 +144,11 @@ COM_AddCommand('lua', function(player, ...)
 		arg = $..v
 	end
 
-	local f = loadstring('return '..arg)
-	if type(f) == 'string' then
-		f = loadstring(arg)
-		if type(f) == 'string' then
-			print_error(f)
+	local f,e = loadstring('return '..arg)
+	if not f then
+		f,e = loadstring(arg)
+		if not f then
+			print_error(e)
 			return
 		end
 	end
