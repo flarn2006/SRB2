@@ -45,6 +45,27 @@ local interval_meta = {
 	end
 }
 
+local watch_meta = {
+	__tostring=function(watch)
+		local str
+		if watch.enabled then
+			str = '<W: '
+		else
+			str = '<w: '
+		end
+		return str..watch.str..'>'
+	end,
+	__call=function(watch, ...)
+		local s,r = pcall(watch.func, ...)
+		if s then
+			return r
+		else
+			watch.enabled = false
+			print_error(r)
+		end
+	end
+}
+
 local list_meta = {
 	__tostring=function(list)
 		if #list == 0 then
@@ -59,9 +80,10 @@ local list_meta = {
 	end
 }
 
-local function process_func_arg(arg, arg_desc)
+local function process_func_arg(arg, arg_desc, prepend)
 	if type(arg) == 'string' then
-		local f,e = loadstring(arg)
+		prepend = $ or ''
+		local f,e = loadstring(prepend..arg)
 		if f then
 			setfenv(f, env)
 			return f
@@ -76,8 +98,13 @@ local function process_func_arg(arg, arg_desc)
 end
 
 local function reset_env()
-	env = {out={}, intervals={}}
+	env = {out={}, intervals={}, watches={}}
+	env.hud_x = 0
+	env.hud_y = 120
+	env.hud_flags = V_HUDTRANS|V_SMALLSCALEPATCH|V_ALLOWLOWERCASE
+	setmetatable(env.out, list_meta)
 	setmetatable(env.intervals, list_meta)
+	setmetatable(env.watches, list_meta)
 
 	env.interval = function(time, func)
 		local str = tostring(func)
@@ -105,6 +132,17 @@ local function reset_env()
 		setmetatable(int, interval_meta)
 		table.insert(env.intervals, int)
 		return int
+	end
+
+	env.watch = function(func, str)
+		str = $ or tostring(func)
+		func = process_func_arg(func, 'the first argument to watch', 'return ')
+		local watch = {func=func, str=str, enabled=true}
+		watch.on = function() watch.enabled = true end
+		watch.off = function() watch.enabled = false end
+		setmetatable(watch, watch_meta)
+		table.insert(env.watches, watch)
+		return watch
 	end
 
 	env.spawn = function(mt, dist, z)
@@ -182,3 +220,18 @@ addHook('ThinkFrame', function()
 		end
 	end
 end)
+
+local function watch_hud(v)
+	local ROW_HEIGHT = 10
+	for i,w in ipairs(env.watches) do
+		if w.enabled then
+			local y = env.hud_y + 2*ROW_HEIGHT * (i-1)
+			v.drawString(env.hud_x, y, '\x82'..w.str..'=', env.hud_flags)
+			v.drawString(env.hud_x, y+ROW_HEIGHT, tostring(w()), env.hud_flags)
+		end
+	end
+end
+
+for i,v in ipairs({'game', 'scores', 'title', 'titlecard', 'intermission'}) do
+	hud.add(watch_hud, v)
+end
