@@ -463,8 +463,8 @@ void CL_LoadServerFiles(void)
 {
 	INT32 i;
 
-//	if (M_CheckParm("-nofiles"))
-//		return;
+	if (M_CheckParm("-nofiles"))
+		return;
 
 	for (i = 1; i < fileneedednum; i++)
 	{
