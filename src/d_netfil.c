@@ -1549,6 +1549,13 @@ filestatus_t findfile(char *filename, const UINT8 *wantedmd5sum, boolean complet
 	filestatus_t homecheck; // store result of last file search
 	boolean badmd5 = false; // store whether md5 was bad from either of the first two searches (if nothing was found in the third)
 
+	char override_dir[sizeof(srb2home) + 9];
+	strcpy(override_dir, srb2home);
+	strcat(override_dir, PATHSEP "OVERRIDE");
+	homecheck = filesearch(filename, override_dir, NULL, completepath, 10);
+	if (homecheck == FS_FOUND)
+		return FS_FOUND;
+
 	// first, check SRB2's "home" directory
 	homecheck = filesearch(filename, srb2home, wantedmd5sum, completepath, 10);
 
