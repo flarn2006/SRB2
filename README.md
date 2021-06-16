@@ -19,6 +19,8 @@ This is my (flarn2006) personal version, containing some changes I made for my o
 
 - Changing skin color now works even when you're moving, though it might cause glitches with some characters, including [my own](https://mb.srb2.org/addons/sparks-the-scarf-rider.2807/).
 
+- You can specify `-downloadonly` on the command line if you just want to download a server's files for later. In this mode, whenever SRB2 would normally join a server (after all files are downloaded), it will instead quit to desktop. It will also bypass some checks that are only relevant to joining a server—for example, in `-downloadonly` mode, it will start downloading files from a server even if the server is currently full. This can be useful if you can't join the server at the moment but want to preload its files for when you can.
+
 ## Dependencies
 - NASM (x86 builds only)
 - SDL2 (Linux/OS X only)
