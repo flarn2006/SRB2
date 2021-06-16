@@ -210,12 +210,15 @@ void CL_PrepareDownloadSaveGame(const char *tmpsave)
 boolean CL_CheckDownloadable(void)
 {
 	UINT8 i,dlstatus = 0;
+	boolean at_least_one = false;
 
 	for (i = 0; i < fileneedednum; i++)
 		if (fileneeded[i].status != FS_FOUND && fileneeded[i].status != FS_OPEN)
 		{
-			if (fileneeded[i].willsend == 1)
+			if (fileneeded[i].willsend == 1) {
+				at_least_one = true;
 				continue;
+			}
 
 			if (fileneeded[i].willsend == 0)
 				dlstatus = 1;
@@ -228,6 +231,9 @@ boolean CL_CheckDownloadable(void)
 		dlstatus = 3;
 
 	if (!dlstatus)
+		return true;
+	
+	if (M_CheckParm("-downloadonly") && at_least_one)
 		return true;
 
 	// not downloadable, put reason in console
@@ -309,6 +315,7 @@ boolean CL_SendFileRequest(void)
 	if (M_CheckParm("-nodownload"))
 		I_Error("Attempted to download files in -nodownload mode");
 
+#if 0
 	for (i = 0; i < fileneedednum; i++)
 		if (fileneeded[i].status != FS_FOUND && fileneeded[i].status != FS_OPEN
 			&& (fileneeded[i].willsend == 0 || fileneeded[i].willsend == 2))
@@ -316,11 +323,12 @@ boolean CL_SendFileRequest(void)
 			I_Error("Attempted to download files that were not sendable");
 		}
 #endif
+#endif
 
 	netbuffer->packettype = PT_REQUESTFILE;
 	p = (char *)netbuffer->u.textcmd;
 	for (i = 0; i < fileneedednum; i++)
-		if ((fileneeded[i].status == FS_NOTFOUND || fileneeded[i].status == FS_MD5SUMBAD))
+		if ((fileneeded[i].status == FS_NOTFOUND || fileneeded[i].status == FS_MD5SUMBAD) && (fileneeded[i].willsend & 1))
 		{
 			totalfreespaceneeded += fileneeded[i].totalsize;
 			nameonly(fileneeded[i].filename);

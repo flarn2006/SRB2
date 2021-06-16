@@ -1864,7 +1864,7 @@ static boolean CL_ServerConnectionSearchTicker(tic_t *asksent)
 		}
 
 		// Quit here rather than downloading files and being refused later.
-		if (serverlist[i].info.refusereason)
+		if (serverlist[i].info.refusereason && !M_CheckParm("-downloadonly"))
 		{
 			D_QuitNetGame();
 			CL_Reset();
@@ -2015,6 +2015,8 @@ static boolean CL_ServerConnectionTicker(const char *tmpsave, tic_t *oldtic, tic
 
 		case CL_ASKJOIN:
 			CL_LoadServerFiles();
+			if (M_CheckParm("-downloadonly"))
+				I_Quit();
 #ifndef NONET
 			// prepare structures to save the file
 			// WARNING: this can be useless in case of server not in GS_LEVEL
@@ -3305,6 +3307,9 @@ void D_QuitNetGame(void)
 		debugfile = NULL;
 	}
 #endif
+	
+	if (M_CheckParm("-downloadonly"))
+		I_Quit();
 }
 
 // Adds a node to the game (player will follow at map change or at savegame....)
