@@ -3247,7 +3247,7 @@ static void Command_Addfile(void)
 	const char *addedfiles[argc]; // list of filenames already processed
 	size_t numfilesadded = 0; // the amount of filenames processed
 		
-	boolean set_modified = !COM_CheckParm("-legit");
+	boolean legit = COM_CheckParm("-legit");
 	boolean mg = modifiedgame;
 	boolean smd = savemoddata;
 
@@ -3309,7 +3309,7 @@ static void Command_Addfile(void)
 				CONS_Printf(M_GetText("Only the server or a remote admin can use this.\n"));
 				continue;
 			}
-			if (set_modified) {
+			if (!legit) {
 				G_SetGameModified(multiplayer);
 			} else {
 				// Will be reset later
@@ -3319,9 +3319,9 @@ static void Command_Addfile(void)
 		}
 
 		// Add file on your client directly if it is trivial, or you aren't in a netgame.
-		if (!(netgame || multiplayer) || musiconly)
+		if (!(netgame || multiplayer) || musiconly || legit)
 		{
-			P_AddWadFile(fn);
+			P_AddWadFile(fn, legit);
 			addedfiles[numfilesadded++] = fn;
 			continue;
 		}
@@ -3337,7 +3337,7 @@ static void Command_Addfile(void)
 		if ((numwadfiles >= MAX_WADFILES)
 		|| ((packetsizetally + nameonlylength(fn) + 22) > MAXFILENEEDED*sizeof(UINT8)))
 		{
-			if (!set_modified) {
+			if (legit) {
 				CONS_Alert(CONS_ERROR, M_GetText("Too many files loaded to add %s\n"), fn);
 				goto exit_function;
 			}
@@ -3376,17 +3376,17 @@ static void Command_Addfile(void)
 			WRITEMEM(buf_p, md5sum, 16);
 		}
 
-		if (!set_modified)
+		if (!legit)
 			addedfiles[numfilesadded++] = fn;
 
-		if (IsPlayerAdmin(consoleplayer) && (!server) && (!set_modified)) // Request to add file
+		if (IsPlayerAdmin(consoleplayer) && (!server)) // Request to add file
 			SendNetXCmd(XD_REQADDFILE, buf, buf_p - buf);
 		else
 			SendNetXCmd(XD_ADDFILE, buf, buf_p - buf);
 	}
 
 exit_function:
-	if (!set_modified) {
+	if (legit) {
 		modifiedgame = mg;
 		savemoddata = smd;
 	}
@@ -3471,7 +3471,7 @@ static void Got_Addfilecmd(UINT8 **cp, INT32 playernum)
 
 	ncs = findfile(filename,md5sum,true);
 
-	if (ncs != FS_FOUND || !P_AddWadFile(filename))
+	if (ncs != FS_FOUND || !P_AddWadFile(filename, false))
 	{
 		Command_ExitGame_f();
 		if (ncs == FS_FOUND)

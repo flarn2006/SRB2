@@ -4303,7 +4303,7 @@ boolean P_RunSOC(const char *socfilename)
 	lumpnum_t lump;
 
 	if (strstr(socfilename, ".soc") != NULL)
-		return P_AddWadFile(socfilename);
+		return P_AddWadFile(socfilename, false);
 
 	lump = W_CheckNumForName(socfilename);
 	if (lump == LUMPERROR)
@@ -4385,7 +4385,7 @@ static lumpinfo_t* FindFolder(const char *folName, UINT16 *start, UINT16 *end, l
 // Add a wadfile to the active wad files,
 // replace sounds, musics, patches, textures, sprites and maps
 //
-boolean P_AddWadFile(const char *wadfilename)
+boolean P_AddWadFile(const char *wadfilename, boolean legit)
 {
 	size_t i, j, sreplaces = 0, mreplaces = 0, digmreplaces = 0;
 	UINT16 numlumps, wadnum;
@@ -4410,7 +4410,7 @@ boolean P_AddWadFile(const char *wadfilename)
 //	UINT16 mapPos, mapNum = 0;
 
 	// Init file.
-	if ((numlumps = W_InitFile(wadfilename, false, false)) == INT16_MAX)
+	if ((numlumps = W_InitFile(wadfilename, legit, false)) == INT16_MAX)
 	{
 		refreshdirmenu |= REFRESHDIR_NOTLOADED;
 		return false;
@@ -4572,7 +4572,7 @@ boolean P_AddWadFile(const char *wadfilename)
 		ST_Start();
 
 	// Prevent savefile cheating
-	if (cursaveslot > 0)
+	if (cursaveslot > 0 && !legit)
 		cursaveslot = 0;
 
 	if (replacedcurrentmap && gamestate == GS_LEVEL && (netgame || multiplayer))
@@ -4580,6 +4580,12 @@ boolean P_AddWadFile(const char *wadfilename)
 		CONS_Printf(M_GetText("Current map %d replaced by added file, ending the level to ensure consistency.\n"), gamemap);
 		if (server)
 			SendNetXCmd(XD_EXITLEVEL, NULL, 0);
+	}
+
+	if (legit) {
+		// Remove the WAD file from the list and free it
+		free(wadfiles[numwadfiles]);
+		--numwadfiles;
 	}
 
 	return true;
