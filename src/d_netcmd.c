@@ -3247,7 +3247,7 @@ static void Command_Addfile(void)
 	const char *addedfiles[argc]; // list of filenames already processed
 	size_t numfilesadded = 0; // the amount of filenames processed
 		
-	boolean legit = COM_CheckParm("-legit");
+	boolean bypass = COM_CheckParm("-bypass") || COM_CheckParm("-legit");
 	boolean mg = modifiedgame;
 	boolean smd = savemoddata;
 
@@ -3309,7 +3309,7 @@ static void Command_Addfile(void)
 				CONS_Printf(M_GetText("Only the server or a remote admin can use this.\n"));
 				continue;
 			}
-			if (!legit) {
+			if (!bypass) {
 				G_SetGameModified(multiplayer);
 			} else {
 				// Will be reset later
@@ -3319,9 +3319,9 @@ static void Command_Addfile(void)
 		}
 
 		// Add file on your client directly if it is trivial, or you aren't in a netgame.
-		if (!(netgame || multiplayer) || musiconly || legit)
+		if (!(netgame || multiplayer) || musiconly || bypass)
 		{
-			P_AddWadFile(fn, legit);
+			P_AddWadFile(fn, bypass);
 			addedfiles[numfilesadded++] = fn;
 			continue;
 		}
@@ -3337,7 +3337,7 @@ static void Command_Addfile(void)
 		if ((numwadfiles >= MAX_WADFILES)
 		|| ((packetsizetally + nameonlylength(fn) + 22) > MAXFILENEEDED*sizeof(UINT8)))
 		{
-			if (legit) {
+			if (bypass) {
 				CONS_Alert(CONS_ERROR, M_GetText("Too many files loaded to add %s\n"), fn);
 				goto exit_function;
 			}
@@ -3376,7 +3376,7 @@ static void Command_Addfile(void)
 			WRITEMEM(buf_p, md5sum, 16);
 		}
 
-		if (!legit)
+		if (!bypass)
 			addedfiles[numfilesadded++] = fn;
 
 		if (IsPlayerAdmin(consoleplayer) && (!server)) // Request to add file
@@ -3386,7 +3386,7 @@ static void Command_Addfile(void)
 	}
 
 exit_function:
-	if (legit) {
+	if (bypass) {
 		modifiedgame = mg;
 		savemoddata = smd;
 	}
