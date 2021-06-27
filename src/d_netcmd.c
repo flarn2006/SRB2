@@ -3301,7 +3301,7 @@ static void Command_Addfile(void)
 			continue;
 		}
 
-		if (!musiconly)
+		if (!musiconly && !bypass)
 		{
 			// ... But only so long as they contain nothing more then music and sprites.
 			if (netgame && !(server || IsPlayerAdmin(consoleplayer)))
