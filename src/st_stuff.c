@@ -1468,7 +1468,7 @@ static void ST_drawPowerupHUD(void)
 
 		if ((stplyr->powers[pw_shield] & SH_NOSTACK & ~SH_FORCEHP) == SH_FORCE)
 		{
-			UINT8 i, max = (stplyr->powers[pw_shield] & SH_FORCEHP);
+			UINT16 i, max = (stplyr->powers[pw_shield] & SH_FORCEHP);
 			for (i = 0; i <= max; i++)
 			{
 				V_DrawSmallScaledPatch(offs-(i<<1), hudinfo[HUD_POWERUPS].y-(i<<1), (V_PERPLAYER|hudinfo[HUD_POWERUPS].f)|((i == max) ? V_HUDTRANS : V_HUDTRANSHALF), forceshield);
