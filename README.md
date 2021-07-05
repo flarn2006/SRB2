@@ -33,6 +33,10 @@ This is my (flarn2006) personal version, containing some changes I made for my o
 
 - You can specify `-downloadonly` on the command line if you just want to download a server's files for later. In this mode, whenever SRB2 would normally join a server (after all files are downloaded), it will instead quit to desktop. It will also bypass some checks that are only relevant to joining a server—for example, in `-downloadonly` mode, it will start downloading files from a server even if the server is currently full. This can be useful if you can't join the server at the moment but want to preload its files for when you can.
 
+- The `-nofiles` command line parameter, commented out in vanilla SRB2, is re-enabled. This option will tell the game not to load addons when joining a server. This means you can join the server even if you don't have a file it's not willing to send, but depending on what the files are, it's likely you will crash. It can still be useful if a server has `maxsend` set too low, as you can set your name prior to joining the server, and even if you crash, they should still get the message.
+
+- When searching for a local copy of a server addon, the game will first search in a directory called "OVERRIDE", if one exists. This folder should be in the main SRB2 folder, where `DOWNLOAD`, `config.cfg`, `gamedata.dat`, et cetera are located. If it finds a file in that location with the requested name, it will load it without verifying the MD5 hash. This can be useful if a server has an addon that does something obnoxious (e.g. `dofor` from admintools) and you want to disable that part of the addon.
+
 ## Dependencies
 - NASM (x86 builds only)
 - SDL2 (Linux/OS X only)
