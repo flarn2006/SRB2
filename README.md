@@ -6,6 +6,23 @@
 
 [Sonic Robo Blast 2](https://srb2.org/) is a 3D Sonic the Hedgehog fangame based on a modified version of [Doom Legacy](http://doomlegacy.sourceforge.net/).
 
+## Dependencies
+- NASM (x86 builds only)
+- SDL2 (Linux/OS X only)
+- SDL2-Mixer (Linux/OS X only)
+- libupnp (Linux/OS X only)
+- libgme (Linux/OS X only)
+- libopenmpt (Linux/OS X only)
+
+## Compiling
+
+See [SRB2 Wiki/Source code compiling](http://wiki.srb2.org/wiki/Source_code_compiling)
+
+## Disclaimer
+Sonic Team Junior is in no way affiliated with SEGA or Sonic Team. We do not claim ownership of any of SEGA's intellectual property used in SRB2.
+
+I (flarn2006) take no responsibility for any damage to your save data or computer. In addition, while this version does allow you to use arbitrary mods in multiplayer games, I don't condone doing so in a manner that gives you an unfair advantage or otherwise violates the rules of the server you're playing on. If you choose to do so anyway, you take sole responsibility for the consequences of your actions.
+
 ## About this fork
 This is my (flarn2006) personal version, containing some changes I made for my own purposes, mainly related to console commands. I'm putting this out here in case anyone else wants to use it, but be aware, a lot of these changes are done in a quick-and-dirty way, and there are some bugs which I may or may not fix when and if I get tired of dealing with them. That said, here are the changes I've made:
 
@@ -38,20 +55,3 @@ This is my (flarn2006) personal version, containing some changes I made for my o
 - When searching for a local copy of a server addon, the game will first search in a directory called "OVERRIDE", if one exists. This folder should be in the main SRB2 folder, where `DOWNLOAD`, `config.cfg`, `gamedata.dat`, et cetera are located. If it finds a file in that location with the requested name, it will load it without verifying the MD5 hash. This can be useful if a server has an addon that does something obnoxious (e.g. `dofor` from admintools) and you want to disable that part of the addon.
 
 - Before downloading a new file with the same name as an existing file in DOWNLOAD, the game will now rename the existing file (adding an "\_old*#*" suffix) as a backup so it doesn't get overwritten.
-
-## Dependencies
-- NASM (x86 builds only)
-- SDL2 (Linux/OS X only)
-- SDL2-Mixer (Linux/OS X only)
-- libupnp (Linux/OS X only)
-- libgme (Linux/OS X only)
-- libopenmpt (Linux/OS X only)
-
-## Compiling
-
-See [SRB2 Wiki/Source code compiling](http://wiki.srb2.org/wiki/Source_code_compiling)
-
-## Disclaimer
-Sonic Team Junior is in no way affiliated with SEGA or Sonic Team. We do not claim ownership of any of SEGA's intellectual property used in SRB2.
-
-I (flarn2006) take no responsibility for any damage to your save data or computer. In addition, while this version does allow you to use arbitrary mods in multiplayer games, I don't condone doing so in a manner that gives you an unfair advantage or otherwise violates the rules of the server you're playing on. If you choose to do so anyway, you take sole responsibility for the consequences of your actions.
