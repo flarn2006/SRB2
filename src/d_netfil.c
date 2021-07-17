@@ -1311,7 +1311,7 @@ void PT_FileFragment(void)
 				if (rename(filename, backup_filename) == -1)
 					I_Error("Error %d renaming %s to %s", errno, filename, backup_filename);
 				else
-					CONS_Printf("\x82NOTICE:\x80 %s already exists; old file saved as %s", filename, backup_filename);
+					CONS_Printf("\x82NOTICE:\x80 %s already exists; old file saved as %s\n", filename, backup_filename);
 			}
 
 				
