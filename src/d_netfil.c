@@ -1292,8 +1292,29 @@ void PT_FileFragment(void)
 		}
 		else
 		{
+			char backup_filename[MAX_WADPATH+14]; // because "_old4294967296" is 14 characters, not that it'll get that long in practice
+			UINT32 n = 0;
 			CL_AbortDownloadResume();
 
+			strcpy(backup_filename, filename);
+			for (;;) {
+				FILE *tempfp;
+				tempfp = fopen(backup_filename, "r");
+				if (tempfp)
+					fclose(tempfp);
+				else
+					break;
+				sprintf(backup_filename, "%s_old%u", filename, n++);
+			}
+
+			if (n) {
+				if (rename(filename, backup_filename) == -1)
+					I_Error("Error %d renaming %s to %s", errno, filename, backup_filename);
+				else
+					CONS_Printf("\x82NOTICE:\x80 %s already exists; old file saved as %s", filename, backup_filename);
+			}
+
+				
 			file->file = fopen(filename, "wb");
 			if (!file->file)
 				I_Error("Can't create file %s: %s", filename, strerror(errno));
