@@ -57,6 +57,7 @@ boolean FIL_FileOK(char const *name);
 
 void FIL_DefaultExtension (char *path, const char *extension);
 void FIL_ForceExtension(char *path, const char *extension);
+const char *FIL_GetExtension(const char *in);
 boolean FIL_CheckExtension(const char *in);
 
 #ifdef HAVE_PNG

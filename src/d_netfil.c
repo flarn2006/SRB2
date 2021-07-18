@@ -1293,10 +1293,16 @@ void PT_FileFragment(void)
 		else
 		{
 			char backup_filename[MAX_WADPATH+14]; // because "_old4294967296" is 14 characters, not that it'll get that long in practice
+			char filename_noext[MAX_WADPATH];
+			char *extension;
 			UINT32 n = 0;
 			CL_AbortDownloadResume();
 
 			strcpy(backup_filename, filename);
+			strcpy(filename_noext, filename);
+			extension = (char*)FIL_GetExtension(filename_noext);
+			*(extension++) = '\0';
+
 			for (;;) {
 				FILE *tempfp;
 				tempfp = fopen(backup_filename, "r");
@@ -1304,7 +1310,7 @@ void PT_FileFragment(void)
 					fclose(tempfp);
 				else
 					break;
-				sprintf(backup_filename, "%s_old%u", filename, n++);
+				sprintf(backup_filename, "%s_old%u.%s", filename_noext, n++, extension);
 			}
 
 			if (n) {

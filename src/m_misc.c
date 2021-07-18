@@ -426,6 +426,21 @@ void FIL_ForceExtension(char *path, const char *extension)
 	strcat(path, extension);
 }
 
+/** Returns a pointer to the file extension in a given string.
+  * If none is present, NULL will be returned.
+  *
+  * \param in String to check.
+  * \return The pointer to the file extension, including the dot.
+  */
+const char *FIL_GetExtension(const char *in)
+{
+	const char *out = NULL;
+	while (*in++) 
+		if (*in == '.')
+			out = in;
+	return out;
+}
+
 /** Checks if a filename extension is found.
   * Lump names do not contain dots.
   *
