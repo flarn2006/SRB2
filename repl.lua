@@ -217,6 +217,15 @@ COM_AddCommand('lua', function(player, ...)
 	end
 
 	env.p = player
+	env.m = nil
+	env.s = nil
+	if player and player.valid and player.mo then
+		env.m = player.mo
+		if player.mo.valid then
+			env.s = player.mo.subsector.sector
+		end
+	end
+	
 	if type(f) == 'string' then print(f) end
 	setfenv(f, env)
 	local s,r = pcall(f)
@@ -224,7 +233,12 @@ COM_AddCommand('lua', function(player, ...)
 	if s then
 		if r ~= nil then
 			table.insert(env.out, r)
-			print('\x82out['..tostring(#env.out)..'] = \x80'..tostring(r)..'\x83 ('..type(r)..')')
+			rawset(env, '_', r)
+			local udtype = type(r)
+			if udtype == 'userdata' then
+				udtype = userdataType(r)
+			end
+			print('\x82out['..tostring(#env.out)..'] = \x80'..tostring(r)..'\x83 ('..udtype..')')
 		end
 	else
 		print_error(r)
