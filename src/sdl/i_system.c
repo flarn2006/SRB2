@@ -2275,7 +2275,8 @@ INT32 I_StartupSystem(void)
 #endif
 	I_StartupConsole();
 #ifdef NEWSIGNALHANDLER
-	I_Fork();
+	if (!M_CheckParm("-nofork"))
+		I_Fork();
 #endif
 	I_RegisterSignals();
 	I_OutputMsg("Compiled for SDL version: %d.%d.%d\n",
@@ -2323,6 +2324,8 @@ void I_Quit(void)
 	I_ShutdownGraphics();
 	I_ShutdownInput();
 	I_ShutdownSystem();
+	if (M_CheckParm("-nofork")) //otherwise, the parent process will handle this in I_Fork
+		I_ShutdownConsole();
 	SDL_Quit();
 	/* if option -noendtxt is set, don't print the text */
 	if (!M_CheckParm("-noendtxt") && W_CheckNumForName("ENDOOM") != LUMPERROR)
