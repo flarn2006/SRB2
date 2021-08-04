@@ -910,6 +910,13 @@ static int libd_getColormap(lua_State *L)
 			skinnum = i;
 	}
 
+	// Fix a crash that appeared in my custom build.
+	if (color >= MAXSKINCOLORS) {
+		CONS_Alert(CONS_WARNING, "Skin color %u is out of range\n", color);
+		color = SKINCOLOR_NONE;
+		// Don't call luaL_error, as this affects control flow and can desync with vanilla builds.
+	}
+
 	// all was successful above, now we generate the colormap at last!
 
 	colormap = R_GetTranslationColormap(skinnum, color, GTC_CACHE);
