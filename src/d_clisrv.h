@@ -201,7 +201,7 @@ typedef struct
 } ATTRPACK clientconfig_pak;
 
 #define MAXSERVERNAME 32
-#define MAXFILENEEDED 2048 //original 915
+#define MAXFILENEEDED 915
 // This packet is too large
 typedef struct
 {
