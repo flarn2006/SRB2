@@ -541,7 +541,7 @@ boolean CL_LoadServerFiles(void)
 	INT32 i;
 
 	if (M_CheckParm("-nofiles"))
-		return;
+		return true;
 
 	for (i = 0; i < fileneedednum; i++)
 	{

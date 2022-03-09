@@ -4605,7 +4605,7 @@ static lumpinfo_t* FindFolder(const char *folName, UINT16 *start, UINT16 *end, l
 // Add a wadfile to the active wad files,
 // replace sounds, musics, patches, textures, sprites and maps
 //
-static boolean P_LoadAddon(UINT16 wadnum, UINT16 numlumps)
+static boolean P_LoadAddon(UINT16 wadnum, UINT16 numlumps, boolean bypass)
 {
 	size_t i, j, sreplaces = 0, mreplaces = 0, digmreplaces = 0;
 	char *name;
@@ -4815,7 +4815,7 @@ boolean P_AddWadFile(const char *wadfilename, boolean bypass)
 	else
 		wadnum = (UINT16)(numwadfiles-1);
 
-	return P_LoadAddon(wadnum, numlumps);
+	return P_LoadAddon(wadnum, numlumps, bypass);
 }
 
 boolean P_AddFolder(const char *folderpath)
@@ -4831,5 +4831,5 @@ boolean P_AddFolder(const char *folderpath)
 	else
 		wadnum = (UINT16)(numwadfiles-1);
 
-	return P_LoadAddon(wadnum, numlumps);
+	return P_LoadAddon(wadnum, numlumps, false);
 }
