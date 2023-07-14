@@ -58,3 +58,5 @@ This is my (flarn2006) personal version, containing some changes I made for my o
 - Before downloading a new file with the same name as an existing file in DOWNLOAD, the game will now rename the existing file (adding an "\_old*#*" suffix) as a backup so it doesn't get overwritten.
 
 - The game is now aware of symbolic links when searching for mod files, and will put the name of the actual file in the WAD list rather than the name of the link. This is intended for easy updating of mod versions in config files, without having to change the version number in each one.
+
+- When joining a server, its IP will be displayed in the console. This is because sometimes I've had a hard time finding the server I was just in when I want to rejoin, like if I forgot the name or the name changed.

@@ -2560,6 +2560,10 @@ static void CL_ConnectToServer(void)
 	{
 		char *gametypestr = serverlist[i].info.gametypename;
 		CONS_Printf(M_GetText("Connecting to: %s\n"), serverlist[i].info.servername);
+		if (I_GetNodeAddress) {
+			const char *addr = I_GetNodeAddress(servernode);
+			CONS_Printf(M_GetText("Server address: %s\n"), addr);
+		}
 		gametypestr[sizeof serverlist[i].info.gametypename - 1] = '\0';
 		CONS_Printf(M_GetText("Gametype: %s\n"), gametypestr);
 		CONS_Printf(M_GetText("Version: %d.%d.%u\n"), serverlist[i].info.version/100,
