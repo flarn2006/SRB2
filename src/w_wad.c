@@ -954,7 +954,7 @@ UINT16 W_InitFile(const char *filename, boolean mainfile, boolean startup)
 	wadfile->numlumps = numlumps;
 	wadfile->foldercount = 0;
 	wadfile->lumpinfo = lumpinfo;
-	wadfile->important = important;
+	wadfile->important = important && !mainfile;
 	fseek(handle, 0, SEEK_END);
 	wadfile->filesize = (unsigned)ftell(handle);
 	wadfile->type = type;

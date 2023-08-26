@@ -8142,11 +8142,11 @@ static boolean P_LoadAddon(UINT16 numlumps, boolean bypass)
 			SendNetXCmd(XD_EXITLEVEL, NULL, 0);
 	}
 
-	if (bypass) {
+	/*if (bypass) {
 		// Remove the WAD file from the list and free it
 		free(wadfiles[numwadfiles]);
 		--numwadfiles;
-	}
+	}*/
 
 	return true;
 }
