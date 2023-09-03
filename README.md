@@ -43,9 +43,9 @@ This is my (flarn2006) personal version, containing some changes I made for my o
 
 - Typing `these_arent_the_mods_youre_looking_for` in the console will clear the "game modified" command if it is set.
 
-- Specifying the `-bypass` option for `addfile` will load the content into the game without remembering the file was added. This means the file won't be added to the WAD list, nor will the game be flagged as modified if it wasn't already. Additionally, if `-bypass` is used in a netgame, the content will simply be loaded locally. This means other clients won't load the file even if they have it, nor will they be kicked for not having it.
+- Specifying the `-bypass` option for `addfile` will load any mod as "unimportant", similar to WADs that only contain audio. This way, the game won't be flagged as modified, you can add it locally in multiplayer, and when hosting, the file won't be sent to players that join.
 
-    - Adding files that affect gameplay is not recommended, as it will likely result in sync issues. The exception is when you're running this in the server console, and the file only makes a one-off change that can be applied to everyone with a single resync.
+    - Adding files that affect gameplay is not recommended in multiplayer, as it will likely result in sync issues. The exception is when you're running this in the server console, and the file only makes a one-off change that can be applied to everyone with a single resync.
 
 - Changing skin color is now possible even when you're moving, though it might cause glitches with some characters, including [my own](https://mb.srb2.org/addons/sparks-the-scarf-rider.2807/). Your skin can be changed while moving as well. As of v2.2.9, [this all works even in multiplayer](https://git.do.srb2.org/STJr/SRB2/issues/588), but doing so in a competitive game mode will generally be considered cheating, so don't do that unless you know everyone on the server is okay with it.
 
