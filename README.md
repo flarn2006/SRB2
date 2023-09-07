@@ -22,10 +22,10 @@ See [SRB2 Wiki/Source code compiling](http://wiki.srb2.org/wiki/Source_code_comp
 ## Disclaimer
 Sonic Team Junior is in no way affiliated with SEGA or Sonic Team. We do not claim ownership of any of SEGA's intellectual property used in SRB2.
 
-I (flarn2006) take no responsibility for any damage to your save data or computer. In addition, while this version does allow you to use arbitrary mods in multiplayer games, I don't condone doing so in a manner that gives you an unfair advantage or otherwise violates the rules of the server you're playing on. If you choose to do so anyway, you take sole responsibility for the consequences of your actions.
+I (Sparkette) take no responsibility for any damage to your save data or computer. In addition, while this version does allow you to use arbitrary mods in multiplayer games, I don't condone doing so in a manner that gives you an unfair advantage or otherwise violates the rules of the server you're playing on. If you choose to do so anyway, you take sole responsibility for the consequences of your actions.
 
 ## About this fork
-This is my (flarn2006) personal version, containing some changes I made for my own purposes, mainly related to console commands. I'm putting this out here in case anyone else wants to use it, but be aware, a lot of these changes are done in a quick-and-dirty way, and there are some bugs which I may or may not fix when and if I get tired of dealing with them. That said, here are the changes I've made:
+This is my (Sparkette) personal version, containing some changes I made for my own purposes, mainly related to console commands. I'm putting this out here in case anyone else wants to use it, but be aware, a lot of these changes are done in a quick-and-dirty way, and there are some bugs which I may or may not fix when and if I get tired of dealing with them. That said, here are the changes I've made:
 
 - The `loadstring` function has been added to Lua.
 
