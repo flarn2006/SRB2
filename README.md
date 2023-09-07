@@ -55,7 +55,7 @@ This is my (Sparkette) personal version, containing some changes I made for my o
 
 - When searching for a local copy of a server addon, the game will first search in a directory called "OVERRIDE", if one exists. This folder should be in the main SRB2 folder, where `DOWNLOAD`, `config.cfg`, `gamedata.dat`, et cetera are located. If it finds a file in that location with the requested name, it will load it without verifying the MD5 hash. This can be useful if a server has an addon that does something obnoxious (e.g. `dofor` from admintools) and you want to disable that part of the addon.
 
-- Whenever a mod is loaded (unless `-bypass` is used) it will look for a file with the same name with a prepended `_` in a directory called "APPEND". If it finds it, it will automatically load it afterwards in `-bypass` mode. This can be used for replacing sounds, sprites, etc. in a mod universally, withoout copying the entire file. (This way, the changes can more easily be applied to new versions of the mod, simply by renaming or linking the file.)
+- Whenever a mod is loaded (unless `-bypass` is used) it will look for a file with the same name with a prepended `_` in a directory called "APPEND". If it finds it, it will automatically load it afterwards in `-bypass` mode. This can be used similarly to "OVERRIDE", for replacing sounds, sprites, etc. in a mod universally, without having to copy all the stuff that isn't changing. (This way, the changes can more easily be applied to new versions of the mod, simply by renaming or linking the file.)
 
 - Before downloading a new file with the same name as an existing file in DOWNLOAD, the game will now rename the existing file (adding an "\_old*#*" suffix) as a backup so it doesn't get overwritten.
 
