@@ -81,6 +81,8 @@
 #include "hardware/hw_model.h"
 #endif
 
+#include <libgen.h>
+
 #include "p_slopes.h"
 
 #include "fastcmp.h" // textmap parsing
@@ -8153,8 +8155,23 @@ static boolean P_LoadAddon(UINT16 numlumps, boolean bypass)
 
 boolean P_AddWadFile(const char *wadfilename, boolean bypass)
 {
-	return D_CheckPathAllowed(wadfilename, "tried to add file") &&
+	boolean result = D_CheckPathAllowed(wadfilename, "tried to add file") &&
 		P_LoadAddon(W_InitFile(wadfilename, bypass, false), bypass);
+	
+	if (result && !bypass) {
+		filestatus_t homecheck;
+		char append_dir[sizeof(srb2home) + 7];
+		strcpy(append_dir, srb2home);
+		strcat(append_dir, PATHSEP "APPEND");
+		char pathbuf[MAX_WADPATH+1];
+		pathbuf[0] = '_'; pathbuf[1] = '\0';
+		strcat(pathbuf, basename(wadfilename));
+		homecheck = filesearch(pathbuf, append_dir, NULL, false, 10);
+		if (homecheck == FS_FOUND)
+			P_AddWadFile(pathbuf, true);
+	}
+
+	return result;
 }
 
 boolean P_AddFolder(const char *folderpath)
