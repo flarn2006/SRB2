@@ -801,8 +801,11 @@ void G_SetGameNotModified()
 {
 	if (modifiedgame) {
 		modifiedgame = false;
-		savemoddata = false;
-		CONS_Alert(CONS_WARNING, M_GetText("Statistics will once again be recorded.\n"));
+		CONS_Alert(CONS_WARNING, M_GetText("modifiedgame has been reset.\n"));
+	}
+	if (usedCheats) {
+		usedCheats = false;
+		CONS_Alert(CONS_WARNING, M_GetText("usedCheats has been reset.\n"));
 	}
 }
 
