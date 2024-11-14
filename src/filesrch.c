@@ -18,6 +18,7 @@
 #include <dirent.h>
 #endif
 #ifdef _WIN32
+#define IGNORE_SYMLINKS
 //#define WIN32_LEAN_AND_MEAN
 #define RPC_NO_WINDOWS_H
 #include <windows.h>
