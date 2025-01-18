@@ -36,7 +36,7 @@ This is my (Sparkette) personal version, containing some changes I made for my o
 
 	- You can set a watch on an expression by calling `watch(expression, label)`, where `expression` is either a function or a string, and `label` is a string to use to label the value on the screen. The `label` argument is optional, but highly recommended if you are using a function. Watches are evaluated every tic and displayed on the HUD. You can also disable a watch (removing it from the screen and preventing its evaluation) and re-enable it, in the same way as with `interval`.
 
-	- Typing `lua_clear` in the console will reset the REPL environment, clearing all defined variables, saved outputs, intervals, and watches.
+	- Typing `lua_reset` in the console will reset the REPL environment, clearing all defined variables, saved outputs, intervals, and watches.
 
 - A `sudo` console command, which does what you'd imagine it does if you're familiar with its namesake. More specifically, it temporarily sets `devparm` to true, and `multiplayer` and `netgame` to false, before executing a command, then restores their previous values afterwards. It also sets a flag which I can reference in other parts of the code to add additional command-specific overrides.
 
