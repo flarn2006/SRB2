@@ -6456,6 +6456,7 @@ static void P_ConvertBinarySectorTypes(void)
 static void P_ConvertBinaryThingTypes(void)
 {
 	size_t i;
+	boolean kpzspringscale = M_CheckParm("-kpzspringscale");
 	mobjtype_t mobjtypeofthing[4096] = {0};
 	mobjtype_t mobjtype;
 
@@ -6472,6 +6473,9 @@ static void P_ConvertBinaryThingTypes(void)
 		mobjtype = mobjtypeofthing[mapthings[i].type];
 		if (mobjtype)
 		{
+			if (kpzspringscale && (mobjinfo[mobjtype].flags & MF_SPRING)) {
+				mapthings[i].scale = (1 + mapthings[i].extrainfo) * FRACUNIT;
+			}
 			if (mobjinfo[mobjtype].flags & MF_BOSS)
 			{
 				INT32 paramoffset = mapthings[i].extrainfo*LE_PARAMWIDTH;
